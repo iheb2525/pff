@@ -60,89 +60,16 @@ export default function UserPage() {
       });
     });
 
-    const serviceCards = document.querySelectorAll<HTMLAnchorElement>('a[data-service]');
+    const dashboardCard = document.querySelector<HTMLAnchorElement>('a[href="#new-reservation"]');
     const newReservationSection = document.getElementById("new-reservation");
     const dashboardSection = document.getElementById("dashboard");
     const backBtn = document.querySelector<HTMLAnchorElement>(".back-btn");
-    const categoriesContainer = document.querySelector<HTMLDivElement>(".nr-categories");
-    const serviceTitle = document.querySelector<HTMLElement>("#new-reservation h2");
 
-    serviceCards.forEach(card => {
-      card.addEventListener("click", (e) => {
-        e.preventDefault();
-        const serviceType = card.getAttribute("data-service");
-        const serviceName = card.querySelector("h2")?.textContent || "Service";
-        
-        // Update service title
-        if (serviceTitle) {
-          serviceTitle.innerHTML = `<i class="fa fa-${serviceType === 'repassage' ? 'tshirt' : 'soap'}"></i> ${serviceName}`;
-        }
-        
-        // Update categories based on service type
-        if (categoriesContainer) {
-          if (serviceType === 'repassage') {
-            categoriesContainer.innerHTML = `
-              <button class="cat active" data-cat="categorie-a">
-                <i class="fa fa-tag"></i>
-                <span>Homme</span>
-              </button>
-              <button class="cat" data-cat="categorie-b">
-                <i class="fa fa-tag"></i>
-                <span>Femme</span>
-              </button>
-              <button class="cat" data-cat="categorie-c">
-                <i class="fa fa-tag"></i>
-                <span>Linge maison</span>
-              </button>
-            `;
-          } else {
-            // Default categories for other services
-            categoriesContainer.innerHTML = `
-              <button class="cat active" data-cat="homme">
-                <i class="fa fa-user-tie"></i>
-                <span>Homme</span>
-              </button>
-              <button class="cat" data-cat="femme">
-                <i class="fa fa-user"></i>
-                <span>Femme</span>
-              </button>
-              <button class="cat" data-cat="linge">
-                <i class="fa fa-home"></i>
-                <span>Linge Maison</span>
-              </button>
-            `;
-          }
-          
-          // Re-attach category click handlers
-          attachCategoryHandlers();
-        }
-        
-        // Show the reservation section
-        dashboardSection?.classList.add("hidden");
-        newReservationSection?.classList.remove("hidden");
-      });
+    dashboardCard?.addEventListener("click", (e) => {
+      e.preventDefault();
+      dashboardSection?.classList.add("hidden");
+      newReservationSection?.classList.remove("hidden");
     });
-    
-    // Function to attach click handlers to category buttons
-    function attachCategoryHandlers() {
-      const catButtons = document.querySelectorAll<HTMLButtonElement>(".nr-categories .cat");
-      catButtons.forEach((btn) => {
-        btn.addEventListener("click", () => {
-          catButtons.forEach((b) => b.classList.remove("active"));
-          btn.classList.add("active");
-          const selectedCat = btn.getAttribute("data-cat");
-          const items = document.querySelectorAll<HTMLElement>(".nr-items .nr-item");
-          items.forEach((item) => {
-            const itemCat = item.getAttribute("data-cat");
-            if (!selectedCat || selectedCat === itemCat) {
-              item.style.display = "flex";
-            } else {
-              item.style.display = "none";
-            }
-          });
-        });
-      });
-    }
 
     backBtn?.addEventListener("click", (e) => {
       e.preventDefault();
